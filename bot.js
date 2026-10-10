@@ -7,11 +7,12 @@ const TOKEN = env.TG_TOKEN, CHAT = env.TG_CHAT_ID, DEMO = env.DEMO === '1';
 const TFMS = { '1h': 3600000, '4h': 14400000, '1d': 86400000 };
 const TFL = (env.TIMEFRAMES || '1h,4h').split(',').map(s => s.trim()).filter(t => TFMS[t]);
 const TOP = +(env.TOP || 20);
-const ONLY_POS = env.ONLY_POSITIVE !== '0';          // chỉ báo coin có backtest dương
+const ONLY_POS = env.ONLY_POSITIVE !== '0';
+const KDJ_ON = env.KDJ_ALERT !== '0';                // bật cảnh báo đảo chiều KDJ (14,3,3), gửi trước, không lọc backtest          // chỉ báo coin có backtest dương
 const WATCH = (env.WATCH || '').split(',').map(s => s.trim().toUpperCase()).filter(Boolean);
 const HOSTS = ['https://data-api.binance.vision', 'https://api.binance.com', 'https://api1.binance.com'];
 const STATE = 'state.json';
-let state = { sent: {}, open: {} };
+let state = { sent: {}, open: {}, kdj: {} };
 try { state = Object.assign(state, JSON.parse(fs.readFileSync(STATE, 'utf8'))); } catch (e) {}
 
 async function getJSON(path) {
@@ -67,7 +68,30 @@ async function handle(sym, tf) {
   }
   // 2) dự báo mới trên nến vừa đóng
   const C = all.filter(k => k.ct <= Date.now());
-  const A = analyze(C), sg = A.signals[A.signals.length - 1];
+  const A = analyze(C);
+  // 2a) KDJ (14,3,3) đảo chiều: báo trước để người dùng xem xét, không cần chỉ báo khác đồng thuận
+  const ka = A.kdjAlert;
+  if (KDJ_ON && ka) {
+    const kk = `${ka.t}|${ka.side}|${ka.level}`;
+    if (state.kdj[key] !== kk) {
+      state.kdj[key] = kk;
+      const buy = ka.side === 'buy', fc = A.fc;
+      const trTxt = ka.aligned === 1 ? 'thuận xu hướng chính (EMA)' : ka.aligned === -1 ? 'NGƯỢC xu hướng chính (EMA): nhiều khả năng chỉ là nhịp hồi/điều chỉnh, thận trọng' : 'xu hướng chính chưa rõ';
+      const others = fc.dir === ka.side ? `đang đồng thuận cùng hướng (${fc.pct}/100)` : fc.dir === 'wait' ? `chưa rõ hướng (${fc.pct}/100)` : `đang nghiêng ngược hướng (${fc.pct}/100)`;
+      const L = [
+        `⚡ ${buy ? '🟢' : '🔴'} <b>${base}/USDT · ${tf} · KDJ ${ka.level === 'early' ? 'CẢNH BÁO SỚM' : 'XÁC NHẬN'}: ĐẢO CHIỀU ${buy ? 'TĂNG' : 'GIẢM'}</b>`,
+        `KDJ(14,3,3): K ${ka.K.toFixed(0)} · D ${ka.D.toFixed(0)} · J ${ka.J.toFixed(0)}`,
+        ka.why, '',
+        `Đây là ${trTxt}.`,
+        `Các chỉ báo khác ${others}.`, ''
+      ];
+      if (buy) L.push(`Nếu muốn theo dõi vào: ${fmt(ka.zoneLo)} – ${fmt(ka.zoneHi)}`, `Cắt lỗ tham khảo: ${fmt(ka.sl)} (−${ka.slPct.toFixed(2)}%)`, `Mục tiêu tham khảo: ${fmt(ka.tp)} (R:R 1:${ka.rr})`);
+      else L.push(`Nên xem xét thoát lệnh hoặc đứng ngoài (spot không bán khống).`, `Mục tiêu giảm tham khảo: ${fmt(ka.tp)}`, `Dự báo sai nếu giá vượt: ${fmt(ka.sl)}`);
+      L.push('', ka.level === 'early' ? 'Đây là cảnh báo SỚM để bạn xem xét trước. Nên chờ nến sau đóng cửa xác nhận (K cắt D) hoặc các chỉ báo khác đồng thuận, rồi mới vào.' : 'KDJ đã xác nhận, nhưng hãy xem thêm các chỉ báo khác và đặt cắt lỗ ngay khi vào.');
+      await send(L.join('\n'));
+    }
+  }
+  const sg = A.signals[A.signals.length - 1];
   if (!sg) return;
   if (!DEMO && sg.i !== C.length - 1) return;
   if (state.sent[key] === sg.t) return;
