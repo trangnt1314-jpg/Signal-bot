@@ -1,0 +1,33 @@
+name: signal-bot
+on:
+  schedule:
+    - cron: '2,32 * * * *'
+  workflow_dispatch:
+    inputs:
+      test:
+        description: 'Gửi tin nhắn thử (true/false)'
+        default: 'false'
+permissions:
+  contents: write
+concurrency:
+  group: signal-bot
+  cancel-in-progress: false
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node bot.js
+        env:
+          TG_TOKEN: ${{ secrets.TG_TOKEN }}
+          TG_CHAT_ID: ${{ secrets.TG_CHAT_ID }}
+          TEST: ${{ github.event.inputs.test }}
+          # Tuỳ chỉnh (bỏ dấu # để dùng): TIMEFRAMES: 4h  |  TOP: 30  |  WATCH: BTCUSDT,ETHUSDT  |  ONLY_POSITIVE: 0
+      - run: |
+          git config user.name "signal-bot"
+          git config user.email "signal-bot@users.noreply.github.com"
+          git add state.json
+          git diff --cached --quiet || (git commit -m "cập nhật trạng thái" && git push)
