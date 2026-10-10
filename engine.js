@@ -85,12 +85,12 @@ function calcInd(o, h, l, c, v) {
   const sig = ema(macd, 9);
   const hist = macd.map((x, i) => x - sig[i]);
 
-  // KDJ (9,3,3)
+  // KDJ (14,3,3)
   const K = NaNs(n), D = NaNs(n), J = NaNs(n);
   let pk = 50, pd = 50;
-  for (let i = 8; i < n; i++) {
+  for (let i = 13; i < n; i++) {
     let hh = -Infinity, ll = Infinity;
-    for (let j = i - 8; j <= i; j++) { if (h[j] > hh) hh = h[j]; if (l[j] < ll) ll = l[j]; }
+    for (let j = i - 13; j <= i; j++) { if (h[j] > hh) hh = h[j]; if (l[j] < ll) ll = l[j]; }
     const rsv = hh === ll ? 50 : (c[i] - ll) / (hh - ll) * 100;
     pk = pk * 2 / 3 + rsv / 3;
     pd = pd * 2 / 3 + pk / 3;
@@ -581,7 +581,34 @@ function analyze(C, opts) {
     if (fsNow && fsNow.up === (dir === 'buy')) { const x = fsNow.ex(1.618); if (sg * (x - fc.tp1) > 0) { fc.tp2 = x; fc.tp2Src = 'Fib mở rộng 161,8%'; } }
   } else if (dir !== 'wait') fc.dir = 'wait';
 
-  return { C, ind, signals, stats, now, zonesNow, zz, ew, ewLast, n, fc, fib: fsNow };
+  // ---- Cảnh báo đảo chiều KDJ (14,3,3): ưu tiên báo sớm, không cần các chỉ báo khác đồng thuận ----
+  let kdjAlert = null;
+  {
+    const i = n - 1, K = ind.K, D = ind.D, J = ind.J;
+    if (i >= 3 && [K[i], D[i], K[i - 1], D[i - 1], J[i], J[i - 1], J[i - 2]].every(isN)) {
+      const upX = K[i - 1] <= D[i - 1] && K[i] > D[i], dnX = K[i - 1] >= D[i - 1] && K[i] < D[i];
+      const jUp = J[i - 1] < J[i - 2] && J[i] > J[i - 1] && J[i - 1] < 0;      // J chạm đáy vùng quá bán rồi ngóc lên
+      const jDn = J[i - 1] > J[i - 2] && J[i] < J[i - 1] && J[i - 1] > 100;     // J chạm đỉnh vùng quá mua rồi quay xuống
+      const jxUp = J[i - 1] <= K[i - 1] && J[i] > K[i] && K[i] < 20;           // J cắt lên K khi K còn thấp
+      const jxDn = J[i - 1] >= K[i - 1] && J[i] < K[i] && K[i] > 80;           // J cắt xuống K khi K còn cao
+      // lọc nhiễu: chỉ báo ở lần đảo chiều đầu tiên, tức là trước đó 8 nến giá đã từng rời khỏi vùng cực (không báo lặp khi KDJ dính mãi ở quá mua/quá bán)
+      const jMax = Math.max(...J.slice(i - 8, i - 1).filter(isN)), jMin = Math.min(...J.slice(i - 8, i - 1).filter(isN));
+      const kMax = Math.max(...K.slice(i - 10, i - 1).filter(isN)), kMin = Math.min(...K.slice(i - 10, i - 1).filter(isN));
+      const freshLow = jMax > 40, freshHigh = jMin < 60;
+      let side = null, level = null, why = '';
+      if (upX && K[i] < 30 && kMax > 50) { side = 'buy'; level = 'confirm'; why = `K (${F0(K[i])}) cắt lên D (${F0(D[i])}) ở vùng thấp: xác nhận đảo chiều tăng`; }
+      else if (dnX && K[i] > 70 && kMin < 50) { side = 'sell'; level = 'confirm'; why = `K (${F0(K[i])}) cắt xuống D (${F0(D[i])}) ở vùng cao: xác nhận đảo chiều giảm`; }
+      else if ((jUp || jxUp) && freshLow) { side = 'buy'; level = 'early'; why = (jUp ? `J chạm vùng quá bán sâu (${F0(J[i - 1])}) rồi quay đầu lên (${F0(J[i])})` : `J (${F0(J[i])}) cắt lên K (${F0(K[i])}) khi K còn thấp`) + ': dấu hiệu sớm, chưa xác nhận'; }
+      else if ((jDn || jxDn) && freshHigh) { side = 'sell'; level = 'early'; why = (jDn ? `J chạm vùng quá mua sâu (${F0(J[i - 1])}) rồi quay đầu xuống (${F0(J[i])})` : `J (${F0(J[i])}) cắt xuống K (${F0(K[i])}) khi K còn cao`) + ': dấu hiệu sớm, chưa xác nhận'; }
+      if (side && isN(atrN)) {
+        const sg = side === 'buy' ? 1 : -1, risk = SLATR * atrN, e = c[n - 1], tr = trendAt(n - 1);
+        kdjAlert = { side, level, why, K: K[i], D: D[i], J: J[i], t: C[n - 1].t, trend: tr, aligned: tr === 0 ? 0 : (tr > 0) === (side === 'buy') ? 1 : -1,
+          entry: e, zoneLo: e - 0.3 * atrN, zoneHi: e + 0.3 * atrN, sl: e - sg * risk, tp: e + sg * RR * risk, rr: RR, slPct: risk / e * 100 };
+      }
+    }
+  }
+
+  return { C, ind, signals, stats, now, zonesNow, zz, ew, ewLast, n, fc, fib: fsNow, kdjAlert };
 }
 
 /* ---------- Dữ liệu mô phỏng khi không gọi được Binance ---------- */
