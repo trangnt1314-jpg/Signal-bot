@@ -48,7 +48,7 @@
   "UNIUSDT|4h": 1792857600000,
   "HYPEUSDT|1h": 1792962000000,
   "SNDKBUSDT|1h": 1792778400000,
-  "SNDKBUSDT|4h": 1792771200000,
+  "SNDKBUSDT|4h": 1793030400000,
   "SPCXBUSDT|1h": 1792764000000,
   "INJUSDT|1h": 1792260000000,
   "TIAUSDT|1h": 1792231200000,
@@ -73,7 +73,8 @@
   "UUSDT|1h": 1793030400000,
   "BMTUSDT|4h": 1792958400000,
   "LINKUSDT|1h": 1792904400000,
-  "BMTUSDT|1h": 1792987200000
+  "BMTUSDT|1h": 1792987200000,
+  "QNTUSDT|1h": 1793048400000
  },
  "open": {
   "MAGICUSDT|4h|1791691200000": {
@@ -139,15 +140,6 @@
    "sl": 0.02513119144938661,
    "tp": 0.04708761710122679
   },
-  "WLDUSDT|1h|1792987200000": {
-   "sym": "WLDUSDT",
-   "tf": "1h",
-   "side": "buy",
-   "t": 1792987200000,
-   "entry": 0.4446,
-   "sl": 0.43301864070686286,
-   "tp": 0.46776271858627433
-  },
   "PEPEUSDT|4h|1792987200000": {
    "sym": "PEPEUSDT",
    "tf": "4h",
@@ -165,6 +157,15 @@
    "entry": 0.2105,
    "sl": 0.1983279686815888,
    "tp": 0.23484406263682234
+  },
+  "QNTUSDT|1h|1793048400000": {
+   "sym": "QNTUSDT",
+   "tf": "1h",
+   "side": "buy",
+   "t": 1793048400000,
+   "entry": 204.28,
+   "sl": 196.09618113286587,
+   "tp": 220.6476377342683
   }
  },
  "kdj": {
@@ -195,10 +196,10 @@
   "TRXUSDT|4h": "1792353600000|buy|early",
   "SNDKBUSDT|4h": "1792728000000|buy|confirm",
   "HYPEUSDT|1h": "1792987200000|buy|early",
-  "SOLUSDT|1h": "1792926000000|buy|early",
+  "SOLUSDT|1h": "1793048400000|buy|early",
   "NEARUSDT|1h": "1792425600000|buy|early",
   "ENAUSDT|1h": "1792951200000|sell|early",
-  "PEPEUSDT|1h": "1792879200000|sell|early",
+  "PEPEUSDT|1h": "1793048400000|buy|early",
   "ZECUSDT|4h": "1792353600000|buy|confirm",
   "ETHUSDT|1h": "1792926000000|buy|early",
   "CRCLBUSDT|4h": "1792497600000|buy|early",
@@ -224,7 +225,7 @@
   "SPCXBUSDT|1h": "1792746000000|sell|early",
   "SOXLBUSDT|1h": "1792746000000|sell|early",
   "UUSDT|1h": "1792987200000|buy|confirm",
-  "UNIUSDT|4h": "1792728000000|buy|confirm",
+  "UNIUSDT|4h": "1793030400000|sell|early",
   "RLUSDUSDT|4h": "1792771200000|sell|confirm",
   "TRXUSDT|1h": "1792951200000|sell|early",
   "XAUTUSDT|1h": "1792969200000|sell|confirm"
