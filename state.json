@@ -8,9 +8,9 @@
   "SUIUSDT|4h": 1793289600000,
   "SUIUSDT|1h": 1793336400000,
   "ADAUSDT|1h": 1791680400000,
-  "WLDUSDT|4h": 1793304000000,
+  "WLDUSDT|4h": 1793361600000,
   "DOGEUSDT|4h": 1793304000000,
-  "WLDUSDT|1h": 1792987200000,
+  "WLDUSDT|1h": 1793383200000,
   "DOGEUSDT|1h": 1793257200000,
   "CFXUSDT|4h": 1791662400000,
   "MAGICUSDT|4h": 1791691200000,
@@ -127,6 +127,15 @@
    "entry": 204.28,
    "sl": 196.09618113286587,
    "tp": 220.6476377342683
+  },
+  "WLDUSDT|4h|1793361600000": {
+   "sym": "WLDUSDT",
+   "tf": "4h",
+   "side": "buy",
+   "t": 1793361600000,
+   "entry": 0.4134,
+   "sl": 0.38504158122454213,
+   "tp": 0.4701168375509157
   }
  },
  "kdj": {
@@ -146,7 +155,7 @@
   "RLCUSDT|1h": "1791727200000|sell|early",
   "TIAUSDT|4h": "1792224000000|sell|confirm",
   "FILUSDT|1h": "1791756000000|sell|confirm",
-  "WLDUSDT|1h": "1793257200000|buy|early",
+  "WLDUSDT|1h": "1793383200000|sell|confirm",
   "AVAXUSDT|4h": "1791792000000|sell|early",
   "UNIUSDT|1h": "1792969200000|sell|confirm",
   "SPCXBUSDT|4h": "1792713600000|buy|early",
@@ -185,7 +194,7 @@
   "ETHUSDT|4h": "1792699200000|buy|early",
   "SPCXBUSDT|1h": "1792746000000|sell|early",
   "SOXLBUSDT|1h": "1793106000000|sell|early",
-  "UUSDT|1h": "1792987200000|buy|confirm",
+  "UUSDT|1h": "1793383200000|buy|early",
   "UNIUSDT|4h": "1793088000000|sell|confirm",
   "RLUSDUSDT|4h": "1792771200000|sell|confirm",
   "TRXUSDT|1h": "1793257200000|sell|early",
@@ -193,6 +202,7 @@
   "PARTIUSDT|1h": "1793304000000|sell|early",
   "UUSDT|4h": "1793318400000|sell|early",
   "GOOGLBUSDT|4h": "1793318400000|buy|early",
-  "INTCBUSDT|4h": "1793347200000|buy|early"
+  "INTCBUSDT|4h": "1793347200000|buy|early",
+  "LINKUSDT|1h": "1793383200000|sell|confirm"
  }
 }
