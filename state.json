@@ -64,7 +64,7 @@
   "ARBUSDT|1h": 1792591200000,
   "UUSDT|4h": 1795003200000,
   "ARBUSDT|4h": 1794240000000,
-  "CRCLBUSDT|4h": 1795060800000,
+  "CRCLBUSDT|4h": 1795118400000,
   "ALTUSDT|1h": 1792645200000,
   "ALTUSDT|4h": 1792656000000,
   "AIUSDT|4h": 1793246400000,
@@ -128,15 +128,6 @@
    "entry": 64.98,
    "sl": 61.15880628729022,
    "tp": 72.62238742541957
-  },
-  "HYPEUSDT|1h|1795107600000": {
-   "sym": "HYPEUSDT",
-   "tf": "1h",
-   "side": "buy",
-   "t": 1795107600000,
-   "entry": 68.98,
-   "sl": 67.4925656851716,
-   "tp": 71.95486862965683
   }
  },
  "kdj": {
@@ -198,7 +189,7 @@
   "UUSDT|1h": "1794769200000|buy|early",
   "UNIUSDT|4h": "1794916800000|sell|early",
   "RLUSDUSDT|4h": "1793937600000|sell|early",
-  "TRXUSDT|1h": "1795107600000|buy|early",
+  "TRXUSDT|1h": "1795132800000|buy|confirm",
   "XAUTUSDT|1h": "1792969200000|sell|confirm",
   "PARTIUSDT|1h": "1793304000000|sell|early",
   "UUSDT|4h": "1793980800000|sell|confirm",
