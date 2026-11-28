@@ -1,6 +1,6 @@
 {
  "sent": {
-  "ZECUSDT|1h": 1795741200000,
+  "ZECUSDT|1h": 1795827600000,
   "ADAUSDT|4h": 1795320000000,
   "AVAXUSDT|4h": 1794355200000,
   "ATOMUSDT|4h": 1791604800000,
@@ -46,7 +46,7 @@
   "XAUTUSDT|4h": 1795593600000,
   "PEPEUSDT|4h": 1795694400000,
   "UNIUSDT|4h": 1795752000000,
-  "HYPEUSDT|1h": 1795107600000,
+  "HYPEUSDT|1h": 1795827600000,
   "SNDKBUSDT|1h": 1794963600000,
   "SNDKBUSDT|4h": 1794542400000,
   "SPCXBUSDT|1h": 1794668400000,
@@ -164,6 +164,24 @@
    "entry": 0.0024,
    "sl": 0.001935934680839514,
    "tp": 0.003328130638320972
+  },
+  "ZECUSDT|1h|1795827600000": {
+   "sym": "ZECUSDT",
+   "tf": "1h",
+   "side": "buy",
+   "t": 1795827600000,
+   "entry": 758.02,
+   "sl": 734.1840642211391,
+   "tp": 805.6918715577217
+  },
+  "HYPEUSDT|1h|1795827600000": {
+   "sym": "HYPEUSDT",
+   "tf": "1h",
+   "side": "buy",
+   "t": 1795827600000,
+   "entry": 64.66,
+   "sl": 63.260435856800264,
+   "tp": 67.45912828639946
   }
  },
  "kdj": {
@@ -237,7 +255,7 @@
   "QQQBUSDT|1h": "1793977200000|sell|confirm",
   "ONEUSDT|1h": "1794110400000|buy|early",
   "BMTUSDT|4h": "1794139200000|sell|early",
-  "HYPEUSDT|4h": "1795752000000|sell|early",
+  "HYPEUSDT|4h": "1795809600000|sell|confirm",
   "LINKUSDT|4h": "1794686400000|buy|early",
   "MUBUSDT|1h": "1794808800000|buy|early",
   "ASTERUSDT|1h": "1794848400000|sell|early",
